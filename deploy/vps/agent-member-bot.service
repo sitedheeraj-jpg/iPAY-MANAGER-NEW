@@ -1,0 +1,21 @@
+[Unit]
+Description=Agent Member Management Telegram Bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=agentbot
+Group=agentbot
+WorkingDirectory=/opt/agent-member-bot
+EnvironmentFile=/opt/agent-member-bot/.env
+ExecStart=/opt/agent-member-bot/.venv/bin/python -m app
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target
