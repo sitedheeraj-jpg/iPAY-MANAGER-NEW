@@ -230,7 +230,7 @@ async def send_all_users_page(
     items = await store.list_users(page * PAGE_SIZE, PAGE_SIZE)
     text = (
         f"📋 <b>All Users</b> · page {page + 1}\n"
-        f"Total accounts: <b>{total}</b>\n\n"
+        f"Total users: <b>{total}</b>\n\n"
         "Select a user card below to manage balance or role."
     )
     keyboard = pagination_keyboard(
