@@ -298,9 +298,10 @@ class MongoStore:
         return await self._collection("users").count_documents({"status": Status.PENDING})
 
     async def list_users(self, skip: int, limit: int) -> list[dict[str, Any]]:
+        # Rejected accounts are hidden from the All Users list (search still finds them).
         cursor = (
             self._collection("users")
-            .find({}, {"_id": 0})
+            .find({"status": {"$ne": Status.REJECTED}}, {"_id": 0})
             .sort("created_at", -1)
             .skip(skip)
             .limit(limit)
@@ -308,7 +309,9 @@ class MongoStore:
         return await cursor.to_list(length=limit)
 
     async def count_users(self) -> int:
-        return await self._collection("users").count_documents({})
+        return await self._collection("users").count_documents(
+            {"status": {"$ne": Status.REJECTED}}
+        )
 
     async def list_agent_members(
         self, agent_id: int, limit: int = 50
